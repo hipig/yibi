@@ -11,13 +11,14 @@ class WechatController extends Controller
         $app = app('wechat.official_account');
         $server = $app->getServer();
 
+        $server->addMessageListener('text', function($message, \Closure $next) {
+            return '这是文本消息';
+        });
+
         $server->addEventListener('subscribe', function($message, \Closure $next) {
             return '感谢您关注 一笔记账';
         });
 
-        $server->addMessageListener('text', function($message, \Closure $next) {
-            return '这是文本消息';
-        });
 
         return $server->serve();
     }
