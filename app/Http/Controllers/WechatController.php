@@ -15,7 +15,7 @@ class WechatController extends Controller
             return '感谢您关注 一笔记账';
         });
 
-        $server->addEventListener('text', function($message, \Closure $next) {
+        $server->addMessageListener('text', function($message, \Closure $next) {
             return '这是文本消息';
         });
 
