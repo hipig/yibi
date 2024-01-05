@@ -3,11 +3,13 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class WechatController extends Controller
 {
     public function serve(Request $request)
     {
+        Log::info('message received：', $request->all());
         $app = app('wechat.official_account');
         $server = $app->getServer();
 
