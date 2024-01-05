@@ -36,8 +36,8 @@ class ParseTransaction extends Command
                 [
                     'type' => 'function',
                     'function' => [
-                        'name' => 'get_category_and_amount',
-                        'description' => 'Get the categories and amounts included in the description',
+                        'name' => 'format_transaction_text',
+                        'description' => '解析文本账单',
                         'parameters' => [
                             'type' => 'object',
                             'properties' => [
@@ -50,8 +50,13 @@ class ParseTransaction extends Command
                                     'type' => 'number',
                                     'description' => '金额',
                                 ],
+                                'type' => [
+                                    'type' => 'string',
+                                    'description' => '交易类型',
+                                    'enum' => ['支出', '收入'],
+                                ],
                             ],
-                            'required' => ['category', 'amount'],
+                            'required' => ['category', 'type', 'amount'],
                         ],
                     ],
                 ]

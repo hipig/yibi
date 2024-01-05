@@ -47,4 +47,28 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+    protected static function boot()
+    {
+        parent::boot();
+        static::created(function (User $user) {
+            // 创建默认账本
+            $ledger = new Ledger([
+                'name' => '日常账本'
+            ]);
+            $ledger->user()->associate($user);
+            $ledger->save();
+            $ledger->setDefault();
+        });
+    }
+
+    public function ledgers()
+    {
+        return $this->hasMany(Ledger::class, 'user_id');
+    }
+
+    public function getDefaultLedger()
+    {
+        return $this->ledgers()->where('is_default', true)->first();
+    }
 }
