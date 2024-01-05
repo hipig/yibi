@@ -87,7 +87,7 @@ class WechatController extends Controller
                 $categoryName = $data['category'] ?? '';
                 $category = $categories->where('name', $categoryName)->first();
                 $transaction->category()->associate($category);
-
+                $transaction->ledger()->associate($ledger);
                 $transaction->save();
 
                 return join(" ", array_filter([$categoryName, Transaction::$typeMap[$type], "{$amount}元"]));
