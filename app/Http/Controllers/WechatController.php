@@ -27,7 +27,7 @@ class WechatController extends Controller
             请输入类似“买奶茶花了15”的话，开启您的第一次记账';
         });
 
-        $server->addEventListener('text', function($message, \Closure $next) {
+        $server->addMessageListener('text', function($message, \Closure $next) {
             $content = $message->Content;
             $user = User::query()->where('weixin_openid', $message->FromUserName)->first();
             $ledger = $user->getDefaultLedger();

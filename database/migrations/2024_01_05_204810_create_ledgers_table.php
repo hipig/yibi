@@ -17,7 +17,7 @@ return new class extends Migration
             $table->unsignedBigInteger('user_id')->comment('用户ID');
             $table->string('name')->comment('名称');
             $table->string('description', 1024)->nullable()->comment('描述');
-            $table->boolean('is_default')->comment('是否默认');
+            $table->boolean('is_default')->default(false)->comment('是否默认');
             $table->timestamps();
         });
     }

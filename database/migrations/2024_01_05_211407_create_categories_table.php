@@ -17,9 +17,9 @@ return new class extends Migration
             $table->unsignedBigInteger('ledger_id')->comment('账本ID');
             $table->unsignedBigInteger('parent_id')->nullable()->comment('上级ID');
             $table->string('name')->comment('名称');
-            $table->boolean('is_directory')->comment('是否拥有子类目');
+            $table->boolean('is_directory')->default(false)->comment('是否拥有子类目');
             $table->unsignedInteger('level')->default(0)->comment('层级');
-            $table->string('path')->comment('父类目路径');
+            $table->string('path')->nullable()->comment('父类目路径');
             $table->timestamps();
         });
     }
