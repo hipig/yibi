@@ -2,8 +2,6 @@
 
 namespace App\Providers;
 
-use EasyWeChat\OfficialAccount\Application as OfficialAccountApplication;
-use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
