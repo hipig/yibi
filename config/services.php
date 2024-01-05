@@ -31,4 +31,10 @@ return [
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
 
+    'openai' => [
+        'api_key' => env('OPENAI_API_KEY'),
+        'base_uri' => env('OPENAI_BASE_URI'),
+        'http_proxy' => env('OPENAI_HTTP_PROXY')
+    ]
+
 ];
