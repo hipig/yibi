@@ -13,11 +13,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        $this->app->bind('wechat.official_account', function (Application $app) {
-            $officialAccountApp = new OfficialAccountApplication(config('wechat'));
-            $officialAccountApp->setRequestFromSymfonyRequest($app['request']);
-            return $officialAccountApp;
-        });
+        //
     }
 
     /**

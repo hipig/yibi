@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "9be6c6b2c1a539ea2b1d8e9baf0efdd5",
+    "content-hash": "b57208a0214eb16b0d478fa16e826c4d",
     "packages": [
         {
             "name": "brick/math",
@@ -1965,6 +1965,64 @@
                 "psr-7"
             ],
             "time": "2023-11-08T09:30:43+00:00"
+        },
+        {
+            "name": "overtrue/laravel-wechat",
+            "version": "7.2.0",
+            "dist": {
+                "type": "zip",
+                "url": "https://mirrors.cloud.tencent.com/repository/composer/overtrue/laravel-wechat/7.2.0/overtrue-laravel-wechat-7.2.0.zip",
+                "reference": "2ef8b18b525e054838770c60bfcfbd30ac9ede65",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/container": "^9.0|^10.0",
+                "w7corp/easywechat": "^6.0.0"
+            },
+            "require-dev": {
+                "brainmaestro/composer-git-hooks": "dev-master",
+                "jetbrains/phpstorm-attributes": "^1.0",
+                "laravel/framework": "^10.0",
+                "laravel/pint": "^1.5"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Overtrue\\LaravelWeChat\\ServiceProvider"
+                    ]
+                },
+                "hooks": {
+                    "pre-commit": [
+                        "composer check-style"
+                    ],
+                    "pre-push": [
+                        "composer check-style"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Overtrue\\LaravelWeChat\\": "src/"
+                }
+            },
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "overtrue",
+                    "email": "anzhengchao@gmail.com"
+                }
+            ],
+            "description": "微信 SDK for Laravel",
+            "keywords": [
+                "laravel",
+                "sdk",
+                "wechat",
+                "weixin"
+            ],
+            "time": "2023-02-15T08:16:22+00:00"
         },
         {
             "name": "overtrue/socialite",
@@ -6907,5 +6965,5 @@
         "php": "^8.1"
     },
     "platform-dev": [],
-    "plugin-api-version": "2.3.0"
+    "plugin-api-version": "2.6.0"
 }

@@ -10,25 +10,11 @@ class WechatController extends Controller
     public function serve(Request $request)
     {
         Log::info('message received：', $request->all());
-        $app = app('wechat.official_account');
-        $server = $app->getServer();
+        $server = app('easywechat.official_account')->getServer();
 
-        $server->with(function($message, \Closure $next) {
-            switch ($message->MsgType) {
-                case 'event':
-                    if ($message->Event === 'subscribe') {
-                        return '感谢您关注 一笔记账xxxxx';
-                    }
-                    break;
-                case 'text':
-                    return '收到文本消息';
-                default:
-                    return '收到其它消息';
-            }
-
-            return $next($message);
+        $server->with(function($message){
+            return "欢迎关注 一笔记账哈哈哈哈！";
         });
-
 
         return $server->serve();
     }
