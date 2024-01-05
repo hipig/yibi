@@ -63,8 +63,6 @@ class ParseTransaction extends Command
             ]
         ]);
 
-        foreach ($response->choices as $result) {
-            dump($result->message);
-        }
+        dd($response->choices[0]->message->toolCalls);
     }
 }

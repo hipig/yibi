@@ -69,7 +69,7 @@ class WechatController extends Controller
                 ]
             ]);
 
-            if ($response->choices && $toolCalls = $response->choices[0]->toolCalls) {
+            if ($response->choices && $toolCalls = $response->choices[0]->message->toolCalls) {
                 $data = [];
                 foreach ($toolCalls as $toolCall) {
                     $data = array_merge($data, json_decode($toolCall->function->arguments, true));
