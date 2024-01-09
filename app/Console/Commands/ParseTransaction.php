@@ -26,10 +26,12 @@ class ParseTransaction extends Command
     public function handle()
     {
         $text = $this->argument('text');
+        $now = now()->format('r');
 
         $response = app('openai')->chat()->create([
             'model' => 'gpt-4-1106-preview',
             'messages' => [
+                ['role' => 'system', 'content' => "Current date is: {$now}"],
                 ['role' => 'user', 'content' => $text],
             ],
             'tools' => [
@@ -54,6 +56,10 @@ class ParseTransaction extends Command
                                     'type' => 'string',
                                     'description' => '交易类型',
                                     'enum' => ['支出', '收入'],
+                                ],
+                                'date' => [
+                                    'type' => 'string',
+                                    'description' => '日期，格式为：2023-01-01',
                                 ],
                             ],
                             'required' => ['category', 'type', 'amount'],

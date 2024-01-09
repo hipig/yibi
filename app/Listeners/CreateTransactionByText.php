@@ -5,6 +5,7 @@ namespace App\Listeners;
 use App\Events\OfficialAccountMessageReceived;
 use App\Models\Transaction;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 
@@ -31,9 +32,11 @@ class CreateTransactionByText implements ShouldQueue
         $ledger = $user->getDefaultLedger();
         $categories = $ledger->categories;
 
+        $now = now()->format('r');
         $response = app('openai')->chat()->create([
             'model' => 'gpt-4-1106-preview',
             'messages' => [
+                ['role' => 'system', 'content' => "Current date is: {$now}"],
                 ['role' => 'user', 'content' => $content],
             ],
             'tools' => [
@@ -59,6 +62,10 @@ class CreateTransactionByText implements ShouldQueue
                                     'description' => '交易类型',
                                     'enum' => ['支出', '收入'],
                                 ],
+                                'date' => [
+                                    'type' => 'string',
+                                    'description' => '日期，格式为：2023-01-01',
+                                ],
                             ],
                             'required' => ['category', 'type', 'amount'],
                         ],
@@ -70,7 +77,12 @@ class CreateTransactionByText implements ShouldQueue
         if ($response->choices && $toolCalls = $response->choices[0]->message->toolCalls) {
             $data = [];
             foreach ($toolCalls as $toolCall) {
-                $data = array_merge($data, json_decode($toolCall->function->arguments, true));
+                $data = array_merge($data, json_decode($toolCall->function->arguments, true) ?? []);
+            }
+
+            if (!isset($data['amount'])) {
+                $this->sendTextMessage($openid, '记账失败：未识别到金额，请重新描述');
+                return;
             }
 
             $amount = $data['amount'];
@@ -78,7 +90,7 @@ class CreateTransactionByText implements ShouldQueue
             $transaction = new Transaction([
                 'amount' => $amount,
                 'type' => $type,
-                'transacted_at' => now(),
+                'transacted_at' => isset($data['date']) ? Carbon::make($data['date']) : now(),
                 'remark' => $content
             ]);
 
@@ -89,15 +101,20 @@ class CreateTransactionByText implements ShouldQueue
             $transaction->save();
 
             $text = join(" ", array_filter([$categoryName, Transaction::$typeMap[$type], "{$amount}元"]));
-            $client = app('easywechat.official_account')->getClient();
-
-            $client->postJson('/cgi-bin/message/custom/send', [
-                'touser' => $openid,
-                'msgtype' => 'text',
-                'text' => [
-                    'content' => $text
-                ]
-            ]);
+            $this->sendTextMessage($openid, $text);
         }
+    }
+
+    protected function sendTextMessage($openid, $message)
+    {
+        $client = app('easywechat.official_account')->getClient();
+
+        return $client->postJson('/cgi-bin/message/custom/send', [
+            'touser' => $openid,
+            'msgtype' => 'text',
+            'text' => [
+                'content' => $message
+            ]
+        ]);
     }
 }
